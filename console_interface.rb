@@ -50,6 +50,7 @@ class ConsoleInterface
 	def get_player i
 		puts "Enter player #{i} name and symbol:"
 		name, symbol = get_input.split ','
+		puts "\n"
 		return name.strip, symbol.strip
 	end
 	
@@ -60,7 +61,7 @@ class ConsoleInterface
 	end
 	
 	def invalid_move row, column
-		puts "Invalid move, try again."
+		puts "Invalid move, try again.\n"
 	end
 	
 	def exit
@@ -69,6 +70,6 @@ class ConsoleInterface
 	end
 	
 	def print_grid
-		puts @state.map {|row| row.map {|i| i.nil? ? " " : i.to_s}.join " | "}.join "\n--+---+--\n"
+		puts "\n" + (@state.map {|row| row.map {|i| i.nil? ? " " : i.to_s}.join " | "}.join "\n--+---+--\n") + "\n\n"
 	end
 end

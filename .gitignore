@@ -1,0 +1,7 @@
+##
+# Ignore Finder(OS X) "trash".
+.DS_Store
+
+##
+# Ignore TextMate Projects.
+*.tmproj

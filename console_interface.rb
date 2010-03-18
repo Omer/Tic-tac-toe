@@ -13,6 +13,8 @@ class ConsoleInterface
 		begin
 		  system 'clear'
 		  @engine.start_game
+		  puts "\nNew game?"
+		  exit if get_input =~ /no|n/i
 		end until false
 	end
 	

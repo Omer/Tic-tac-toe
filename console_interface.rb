@@ -1,4 +1,5 @@
 require 'engine'
+require 'player'
 
 class ConsoleInterface
 	def initialize
@@ -9,7 +10,10 @@ class ConsoleInterface
 	
 	def start
 		@engine.get_players
-		@engine.start_game
+		begin
+		  system 'clear'
+		  @engine.start_game
+		end until false
 	end
 	
 	def update symbol, grid = nil
@@ -55,13 +59,22 @@ class ConsoleInterface
 	
 	def get_input
 		input = gets
-		exit if input == "exit\n" or input == "quit\n"
+		exit  if input == "exit\n" or input == "quit\n"
+		stats if input == "stats\n" 
 		input
 	end
 	
 	def invalid_move row, column
 		puts "Invalid move, try again."
 	end
+	
+	def stats
+	  puts "--- Game Statistics ---\n\n"
+	  puts "Games played so far: #{@engine.games.count}"
+	  Player.find_all.each do |player|
+	    puts "#{player.name} won #{player.victuries}"
+    end
+  end
 	
 	def exit
 		system 'clear'

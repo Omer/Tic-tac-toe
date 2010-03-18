@@ -1,9 +1,10 @@
 require 'model'
 require 'player'
+require 'helper'
 require 'singleton'
 
 class Engine
-	include Singleton
+	include Singleton, Helper
 	
 	attr_reader :games, :turns, :current_player
 	
@@ -17,6 +18,14 @@ class Engine
 	def interface= i
 		@interface = i
 		@interface.update :setup
+	end
+	
+	def get_players
+		name, symbol = @interface.get_player 1
+		Player.new name, symbol
+		
+		name, symbol = @interface.get_player 2
+		Player.new name, symbol
 	end
 	
 	def start_game
@@ -42,9 +51,23 @@ class Engine
 	
 	protected
 	def turn player
-		@interface.update :pre_turn
-		row, column = @interface.get_move
+		begin
+			@interface.update :pre_turn
+			row, column = @interface.get_move
+		end until (valid_turn? row, column)
+		
 		Model.instance.mark @current_player.symbol, row, column
 		@interface.update :post_turn, Model.instance.grid
+	end
+	
+	def check_turn row, column
+		raise 'Invalid move' unless valid_turn?
+	end
+	
+	def valid_turn? row, column
+		is_numeric? row and is_numeric? column and
+		row    <= 2     and row    >= 0        and
+		column <= 2     and column >= 0        and
+		!Model.instance.marked? row, column
 	end
 end

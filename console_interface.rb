@@ -3,7 +3,13 @@ require 'engine'
 class ConsoleInterface
 	def initialize
 		@engine = Engine.instance
+		@engine.interface = self
 		@state = Array.new(3).map! {Array.new(3)}
+	end
+	
+	def start
+		@engine.get_players
+		@engine.start_game
 	end
 	
 	def update symbol, grid = nil
@@ -38,7 +44,28 @@ class ConsoleInterface
 	end
 	
 	def get_move
-		(gets[0..2].split ',').map {|s| s.to_i}
+		(get_input[0..2].split ',').map {|s| s.to_i}
+	end
+	
+	def get_player i
+		puts "Enter player #{i} name and symbol:"
+		name, symbol = get_input.split ','
+		return name.strip, symbol.strip
+	end
+	
+	def get_input
+		input = gets
+		exit if input == "exit\n" or input == "quit\n"
+		input
+	end
+	
+	def invalid_move row, column
+		puts "Invalid move, try again."
+	end
+	
+	def exit
+		system 'clear'
+		Process.exit
 	end
 	
 	def print_grid

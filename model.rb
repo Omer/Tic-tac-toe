@@ -1,4 +1,8 @@
+require 'singleton'
+
 class Model
+  include Singleton
+  
   def initialize
     clear_grid  # initialise multidimensional array to store the marks.
   end

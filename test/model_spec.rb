@@ -4,6 +4,7 @@ require 'player'
 describe Model do
   before(:all) do 
     @model = Model.instance
+    Player.clear_instances
     @player = Player.new("Bob","O")
   end
   

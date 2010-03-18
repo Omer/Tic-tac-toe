@@ -34,6 +34,10 @@ class Model
     (0..2).map {|i| @grid[i][2-i] == symbol}.all?
   end
   
+  def draw?
+  	(0..2).map {|i| (0..2).map {|j| marked? i, j}.all?}.all?
+  end
+  
   protected
   def winning_row? test_grid, symbol
     test_grid.map { |row| row.all? {|mark| mark == symbol } }.any?

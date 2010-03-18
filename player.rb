@@ -6,6 +6,7 @@ class Player
     @name   = name
     raise ArgumentError, 'An error has occured' unless self.class.find_by_symbol(symbol).nil?
     @symbol = symbol
+    @players_cycle = ObjectSpace.each_object(Player).cycle
   end
   
   def to_s
@@ -13,7 +14,7 @@ class Player
   end
   
   def self.find_next
-    ObjectSpace.each_object(Player).cycle.next
+    @players_cycle.next
   end
   
   def self.find_by_symbol symbol

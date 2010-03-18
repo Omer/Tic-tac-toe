@@ -12,4 +12,16 @@ describe Player do
   it "should be seachable by symbol" do
     Player.find_by_symbol("X").should == @player
   end
+  
+  it "should be seachable by name" do
+    Player.find_by_name("Alice").should == @player
+  end
+  
+  it "should test for unique name" do
+    lambda{Player.new("Alice", "O")}.should raise_error
+  end
+  
+  it "should test for unique symbol" do
+    lambda{Player.new("Bob", "X")}.should raise_error
+  end
 end

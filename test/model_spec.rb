@@ -41,4 +41,19 @@ describe Model do
     @model.mark @player.symbol, 1, 2
     @model.victory?(@player.symbol).should == false
   end
+  
+  it "should check whether the grid is full or not" do
+    @player2 = Player.new("Jim","V")
+    @model.mark @player.symbol, 0, 0
+    @model.mark @player.symbol, 0, 1
+    @model.mark @player2.symbol, 0, 2
+    @model.mark @player2.symbol, 1, 0
+    @model.mark @player2.symbol, 1, 1
+    @model.mark @player.symbol, 1, 2
+    @model.mark @player.symbol, 2, 0
+    @model.mark @player.symbol, 2, 1
+    @model.grid_full?.should == false
+    @model.mark @player2.symbol, 2, 2
+    @model.grid_full?.should == true
+  end
 end

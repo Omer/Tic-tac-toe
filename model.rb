@@ -34,7 +34,8 @@ class Model
     (0..2).map {|i| @grid[i][2-i] == symbol}.all?
   end
   
-  def draw?
+  # check whether the grid is full or not.
+  def grid_full?
   	(0..2).map {|i| (0..2).map {|j| marked? i, j}.all?}.all?
   end
   

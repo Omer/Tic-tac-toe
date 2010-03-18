@@ -2,9 +2,9 @@ class Player
   attr_reader :name, :symbol
  
   def initialize name, symbol
-    raise InputError, 'An error has occured' unless self.class.find_by_name(name).nil?
+    raise ArgumentError, 'An error has occured' unless self.class.find_by_name(name).nil?
     @name   = name
-    raise InputError, 'An error has occured' unless self.class.find_by_symbol(symbol).nil?
+    raise ArgumentError, 'An error has occured' unless self.class.find_by_symbol(symbol).nil?
     @symbol = symbol
   end
   

@@ -1,5 +1,5 @@
 class Player
-  attr_reader :name, :symbol
+  attr_reader :name, :symbol, :victories
   
   @@players       = []
   @@players_cycle = nil
@@ -8,11 +8,16 @@ class Player
     raise ArgumentError, 'A player with that name already exists' unless self.class.find_by_name(name).nil?
     raise ArgumentError, 'A player with that symbol already exists' unless self.class.find_by_symbol(symbol).nil?
     
-    @name   = name
-    @symbol = symbol
+    @name      = name
+    @symbol    = symbol
+    @victories = 0
     
     @@players.push self
     @@players_cycle = @@players.cycle
+  end
+  
+  def victory!
+  	@victories += 1
   end
   
   def to_s

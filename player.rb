@@ -1,31 +1,43 @@
 class Player
   attr_reader :name, :symbol
+  
+  @@players       = []
+  @@players_cycle = nil
  
   def initialize name, symbol
-    raise ArgumentError, 'An error has occured' unless self.class.find_by_name(name).nil?
+    raise ArgumentError, 'A player with that name already exists' unless self.class.find_by_name(name).nil?
+    raise ArgumentError, 'A player with that symbol already exists' unless self.class.find_by_symbol(symbol).nil?
+    
     @name   = name
-    raise ArgumentError, 'An error has occured' unless self.class.find_by_symbol(symbol).nil?
     @symbol = symbol
-    @@players_cycle = ObjectSpace.each_object(Player).cycle
+    
+    @@players.push self
+    @@players_cycle = @@players.cycle
   end
   
   def to_s
-    "Name: " + @name + ", Symbol: " + @symbol
+  	"Player: #{@name} (#{@symbol})"
+  end
+  
+  def self.clear_instances
+  	@@players = []
+  	@@players_cycle = nil
   end
   
   def self.find_next
+  	raise 'No players to cycle' if @@players_cycle.nil?
     @@players_cycle.next
   end
   
   def self.find_by_symbol symbol
     found = nil
-    ObjectSpace.each_object(Player) { |player| found = player if player.symbol == symbol }
+    @@players.each { |player| found = player if player.symbol == symbol }
     found
   end
   
   def self.find_by_name name
     found = nil
-    ObjectSpace.each_object(Player) { |player| found = player if player.name == name }
+    @@players.each { |player| found = player if player.name == name }
     found
   end
 end

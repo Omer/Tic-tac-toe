@@ -1,7 +1,9 @@
 require 'player'
+require 'model'
 
 describe Player do
   before(:all) do 
+    @model = Model.instance
     Player.clear_instances
     @player = Player.new("Alice", "X")
   end
@@ -31,5 +33,14 @@ describe Player do
     Player.find_next.should == @player
     Player.find_next.should == player2
     Player.find_next.should == @player
+  end
+  
+  it "should count the number of victories so far" do
+    @player.victories.should == 0
+    @model.mark @player.symbol, 0, 0
+    @model.mark @player.symbol, 0, 1
+    @model.mark @player.symbol, 0, 2
+    @player.victory! if @model.victory? @player.symbol 
+    @player.victories.should == 1
   end
 end

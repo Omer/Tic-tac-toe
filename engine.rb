@@ -41,10 +41,11 @@ class Engine
 		end until (Model.instance.victory? @current_player.symbol) or Model.instance.grid_full?
 		
 		if Model.instance.victory? @current_player.symbol
-			@games.push Player.find_by_symbol(@current_player.symbol).name
+			@games.push [Player.find_by_symbol(@current_player.symbol).name, @turns]
+      @current_player.victory!
 			@interface.update :victory
 		else
-			@games.push "Draw"
+			@games.push ["Draw",@turns]
 			@interface.update :draw
 		end
 	end
@@ -54,16 +55,13 @@ class Engine
 		begin
 			@interface.update :pre_turn
 			row, column = @interface.get_move
+			@interface.invalid_move row, column unless valid_turn? row, column
 		end until (valid_turn? row, column)
 		
 		Model.instance.mark @current_player.symbol, row, column
 		@interface.update :post_turn, Model.instance.grid
 	end
-	
-	def check_turn row, column
-		raise 'Invalid move' unless valid_turn?
-	end
-	
+
 	def valid_turn? row, column
 		is_numeric? row and is_numeric? column and
 		row    <= 2     and row    >= 0        and

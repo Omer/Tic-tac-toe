@@ -23,7 +23,7 @@ class Engine
 		raise 'No interface set for engine' if @interface.nil?
 		
 		@interface.update :new_game
-		@turns = 0
+		@turns  = 0
 		
 		begin
 			@current_player = Player.find_next
@@ -45,6 +45,6 @@ class Engine
 		@interface.update :pre_turn
 		row, column = @interface.get_move
 		Model.instance.mark @current_player.symbol, row, column
-		@interface.update :post_turn
+		@interface.update :post_turn, Model.instance.grid
 	end
 end

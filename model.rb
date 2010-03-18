@@ -3,6 +3,8 @@ require 'singleton'
 class Model
   include Singleton
   
+  attr_reader :grid
+  
   def initialize
     clear_grid  # initialise multidimensional array to store the marks.
   end

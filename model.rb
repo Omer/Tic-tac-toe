@@ -28,10 +28,10 @@ class Model
   end
   
   def victory? symbol
-    winning_row? @grid, symbol or           # check row
-    winning_row? @grid.transpose, symbol or # check column
-                                            # check diagonal
-    winning_row? [[@grid[0][0],@grid[1][1],@grid[2][2]],[@grid[0][2],@grid[1][1],@grid[2][0]]], symbol ? true : false
+    winning_row? @grid, symbol or           		# check row
+    winning_row? @grid.transpose, symbol or 		# check column
+    (0..2).map {|i| @grid[i][i] == symbol}.all? or  # check diagonals
+    (0..2).map {|i| @grid[i][2-i] == symbol}.all?
   end
   
   protected

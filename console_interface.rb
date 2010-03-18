@@ -53,7 +53,10 @@ class ConsoleInterface
 	
 	def get_player i
 		puts "Enter player #{i} name and symbol:"
-		name, symbol = get_input.split ','
+		begin
+			name, symbol = gets.split ','
+			puts "Please enter name as `Name, Symbol`:" if name.nil? or symbol.nil?
+		end until !name.nil? and !symbol.nil?
 		puts "\n"
 		return name.strip, symbol.strip
 	end
@@ -61,7 +64,11 @@ class ConsoleInterface
 	def get_input
 		input = gets
 		exit  if input == "exit\n" or input == "quit\n"
-		stats if input == "stats\n" 
+		if input == "stats\n"
+			stats
+			update :pre_turn
+			input = get_input
+		end
 		input
 	end
 	
@@ -70,12 +77,11 @@ class ConsoleInterface
 	end
 	
 	def stats
-	  puts "--- Game Statistics ---\n\n"
+	  puts "\n--- Game Statistics ---\n\n"
 	  puts "Games played so far: #{@engine.games.count}"
-	  Player.find_all.each do |player|
-	    puts "#{player.name} won #{player.victuries}"
-    end
-  end
+	  Player.find_all.each {|player| puts "#{player.name} won #{player.victories}"}
+	  puts "-----------------------\n\n"
+  	end
 	
 	def exit
 		system 'clear'

@@ -24,6 +24,10 @@ class Player
   	@@players_cycle = nil
   end
   
+  def self.find_all
+  	@@players
+  end
+  
   def self.find_next
   	raise 'No players to cycle' if @@players_cycle.nil?
     @@players_cycle.next

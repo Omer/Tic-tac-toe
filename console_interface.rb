@@ -13,6 +13,8 @@ class ConsoleInterface
 		begin
 		  system 'clear'
 		  @engine.start_game
+		  stats
+		  
 		  puts "\nNew game?"
 		  exit if get_input =~ /no|n/i
 		end until false
@@ -29,7 +31,8 @@ class ConsoleInterface
 	end
 	
 	def new_game
-		puts "--- New Game ---\n\n"
+		puts "--- New Game ---\n"
+		print_grid
 	end
 	
 	def victory
@@ -41,7 +44,7 @@ class ConsoleInterface
 	end
 	
 	def pre_turn
-		puts "#{@engine.current_player.name}'s turn:\n"
+		puts "#{@engine.current_player.name}'s turn:"
 	end
 	
 	def post_turn
@@ -73,8 +76,8 @@ class ConsoleInterface
 		input
 	end
 	
-	def invalid_move row, column
-		puts "Invalid move, enter new move as 'row,column'.\n"
+	def invalid_move row, column, marked
+		puts (marked ? "That square is already taken\n" : "Invalid move, enter move as 'row,column'.\n")
 	end
 	
 	def stats
@@ -90,6 +93,6 @@ class ConsoleInterface
 	end
 	
 	def print_grid
-		puts "\n" + (Model.instance.grid.map {|row| row.map {|i| i.nil? ? " " : i.to_s}.join " | "}.join "\n--+---+--\n") + "\n\n"
+		puts "\n" + (Model.instance.grid.map {|row| "  " + (row.map {|i| i.nil? ? " " : i.to_s}.join " | ")}.join "\n ---+---+---\n") + "\n\n"
 	end
 end

@@ -52,8 +52,13 @@ class Engine
 		begin
 			@interface.update :pre_turn
 			row, column = @interface.get_move
-			@interface.invalid_move row, column unless valid_turn? row, column
-		end until (valid_turn? row, column)
+			
+			if valid_turn? row, column
+				@interface.invalid_move row, column, true if Model.instance.marked? row, column
+			else
+				@interface.invalid_move row, column, false
+			end
+		end until (valid_turn? row, column) and !Model.instance.marked? row, column
 		
 		Model.instance.mark @current_player.symbol, row, column
 		@interface.update :post_turn
@@ -62,7 +67,6 @@ class Engine
 	def valid_turn? row, column
 		is_numeric? row and is_numeric? column and
 		row    <= 2     and row    >= 0        and
-		column <= 2     and column >= 0        and
-		!Model.instance.marked? row, column
+		column <= 2     and column >= 0
 	end
 end

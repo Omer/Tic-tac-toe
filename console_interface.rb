@@ -1,11 +1,11 @@
 require 'engine'
+require 'model'
 require 'player'
 
 class ConsoleInterface
 	def initialize
 		@engine = Engine.instance
 		@engine.interface = self
-		@state = Array.new(3).map! {Array.new(3)}
 	end
 	
 	def start
@@ -18,8 +18,7 @@ class ConsoleInterface
 		end until false
 	end
 	
-	def update symbol, grid = nil
-		@state = grid unless grid.nil?
+	def update symbol
 		send symbol
 	end
 	
@@ -50,17 +49,17 @@ class ConsoleInterface
 	end
 	
 	def get_move
-		(get_input[0..2].split ',').map {|s| s.to_i}
+		(get_input[0..2].split ',').map {|s| s.to_i - 1 }
 	end
 	
 	def get_player i
-		puts "Enter player #{i} name and symbol:"
+		puts "Enter player #{i} name:"
 		begin
-			name, symbol = gets.split ','
-			puts "Please enter name as `Name, Symbol`:" if name.nil? or symbol.nil?
-		end until !name.nil? and !symbol.nil?
+		  (input = gets) == "\n" ? name = "Player #{i}" : name = input
+			puts "Please reenter the name:" if name.nil?
+		end until !name.nil?
 		puts "\n"
-		return name.strip, symbol.strip
+		return name.strip
 	end
 	
 	def get_input
@@ -75,14 +74,14 @@ class ConsoleInterface
 	end
 	
 	def invalid_move row, column
-		puts "Invalid move, try again.\n"
+		puts "Invalid move, enter new move as 'row,column'.\n"
 	end
 	
 	def stats
-	  puts "\n--- Game Statistics ---\n\n"
+	  puts "\n--- Game Statistics ----\n\n"
 	  puts "Games played so far: #{@engine.games.count}"
-	  Player.find_all.each {|player| puts "#{player.name} won #{player.victories}"}
-	  puts "-----------------------\n\n"
+	  Player.find_all.each {|player| puts "#{player.to_s} won #{player.victories}"}
+	  puts "------------------------\n\n"
   	end
 	
 	def exit
@@ -91,6 +90,6 @@ class ConsoleInterface
 	end
 	
 	def print_grid
-		puts "\n" + (@state.map {|row| row.map {|i| i.nil? ? " " : i.to_s}.join " | "}.join "\n--+---+--\n") + "\n\n"
+		puts "\n" + (Model.instance.grid.map {|row| row.map {|i| i.nil? ? " " : i.to_s}.join " | "}.join "\n--+---+--\n") + "\n\n"
 	end
 end

@@ -21,11 +21,8 @@ class Engine
 	end
 	
 	def get_players
-		name, symbol = @interface.get_player 1
-		Player.new name, symbol
-		
-		name, symbol = @interface.get_player 2
-		Player.new name, symbol
+		Player.new (@interface.get_player 1)
+		Player.new (@interface.get_player 2)
 	end
 	
 	def start_game
@@ -59,7 +56,7 @@ class Engine
 		end until (valid_turn? row, column)
 		
 		Model.instance.mark @current_player.symbol, row, column
-		@interface.update :post_turn, Model.instance.grid
+		@interface.update :post_turn
 	end
 
 	def valid_turn? row, column

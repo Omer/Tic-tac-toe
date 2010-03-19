@@ -1,19 +1,22 @@
 class Player
   attr_reader :name, :symbol, :victories
   
-  @@players       = []
-  @@players_cycle = nil
+  @@players         = []
+  @@players_cycle   = nil
+  @@defualt_symbols = nil
  
-  def initialize name, symbol
+  def initialize name
     raise ArgumentError, 'A player with that name already exists' unless self.class.find_by_name(name).nil?
-    raise ArgumentError, 'A player with that symbol already exists' unless self.class.find_by_symbol(symbol).nil?
     
-    @name      = name
-    @symbol    = symbol
-    @victories = 0
-    
+    @@defualt_symbols ||= [:X, :O].cycle
     @@players.push self
     @@players_cycle = @@players.cycle
+    
+    raise 'A game can have only two players' if @@players.count > 2
+
+    @name      = name
+    @symbol    = @@defualt_symbols.next
+    @victories = 0
   end
   
   def victory!
@@ -21,12 +24,13 @@ class Player
   end
   
   def to_s
-  	"Player: #{@name} (#{@symbol})"
+  	"#{@name} (#{@symbol})"
   end
   
   def self.clear_instances
-  	@@players = []
-  	@@players_cycle = nil
+  	@@players         = []
+  	@@players_cycle   = nil
+  	@@defualt_symbols = nil
   end
   
   def self.find_all

@@ -1,4 +1,4 @@
-require 'game_board'
+require 'board'
 require 'player'
 require 'helper'
 require 'singleton'
@@ -6,10 +6,10 @@ require 'singleton'
 class Engine
 	include Singleton, Helper
 	
-	attr_reader :games, :turns, :current_player
+	attr_reader :games, :turns, :current_player, :board
 	
 	def initialize
-	  	@board = GameBoard.instance
+	  @board ||= Board.new
 		@interface = nil
 		@current_player = nil
 		@games = []

@@ -1,11 +1,10 @@
 require 'engine'
-require 'game_board'
 require 'player'
 
 class ConsoleInterface
 	def initialize
-		@board            = GameBoard.instance
 		@engine           = Engine.instance
+		@board            = @engine.board
 		@engine.interface = self
 	end
 	

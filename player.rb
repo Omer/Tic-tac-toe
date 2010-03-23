@@ -30,7 +30,7 @@ class Player
   def self.clear_instances
   	@@players         = []
   	@@players_cycle   = nil
-  	@@defualt_symbols = nil
+  	@@default_symbols = nil
   end
   
   def self.find_all

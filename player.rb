@@ -6,7 +6,7 @@ class Player
   @@default_symbols = nil
  
   def initialize name
-    raise ArgumentError, 'A player with that name already exists' unless self.class.find_by_name(name).nil?
+    raise ArgumentError, 'A player with that name already exists' unless self.class.find_by(:name, name).nil?
     
     @@default_symbols ||= [:X, :O].cycle
     @@players.push self
@@ -42,15 +42,9 @@ class Player
     @@players_cycle.next
   end
   
-  def self.find_by_symbol symbol
+  def self.find_by symbol, param
     found = nil
-    @@players.each { |player| found = player if player.symbol == symbol }
-    found
-  end
-  
-  def self.find_by_name name
-    found = nil
-    @@players.each { |player| found = player if player.name == name }
+    @@players.each { |player| found = player if player.send(symbol) == param }
     found
   end
 end

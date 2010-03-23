@@ -4,15 +4,15 @@ describe Player do
   include TicTacToeSpecHelper
   
   before(:all) do 
-    @model = Model.instance
+    @board = Board.new
   end
   
   before(:each) do
-    @player = Player.new "Alice"
+    @player = Player.new("Alice")
   end
   
   after(:each) do
-    @model.clear_grid
+    @board.clear_grid
     Player.clear_instances
   end
   
@@ -26,11 +26,11 @@ describe Player do
   end
   
   it "should be seachable by symbol" do
-    Player.find_by_symbol(:X).should equal(@player)
+    Player.find_by(:symbol, :X).should equal(@player)
   end
   
   it "should be seachable by name" do
-    Player.find_by_name("Alice").should equal(@player)
+    Player.find_by(:name, "Alice").should equal(@player)
   end
   
   it "should test for unique name" do
@@ -49,9 +49,9 @@ describe Player do
   end
   
   it "should count the number of victories" do
-    @model.mark @player.symbol, 0, 0
-    @model.mark @player.symbol, 0, 1
-    @model.mark @player.symbol, 0, 2
-    lambda {@player.victory! if @model.victory? @player.symbol}.should increase {@player.victories}
+    @board.mark @player.symbol, 0, 0
+    @board.mark @player.symbol, 0, 1
+    @board.mark @player.symbol, 0, 2
+    lambda {@player.victory! if @board.victory? @player.symbol}.should increase {@player.victories}
   end
 end

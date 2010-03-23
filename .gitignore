@@ -5,3 +5,7 @@
 ##
 # Ignore TextMate Projects.
 *.tmproj
+
+##
+# Ignore Refactoring Reports
+refactoring_report

@@ -23,7 +23,11 @@ class Engine
 	
 	def get_players
 		Player.new (@interface.get_player 1)
-		Player.new (@interface.get_player 2)
+		begin
+			Player.new (@interface.get_player 2)
+		rescue ArgumentError
+			@interface.handle_exception
+		end until Player.find_all.count == 2
 	end
 	
 	def start_game
@@ -36,7 +40,7 @@ class Engine
 			@current_player = Player.find_next
 			current_symbol = @current_player.symbol
 			
-			turn current_symbol
+			turn
 			@turns += 1
 		end until (@model.victory? current_symbol) or @model.grid_full?
 		
@@ -51,10 +55,14 @@ class Engine
 	end
 	
 	protected
-	def turn symbol
+	def turn
 		begin
 			@interface.update :pre_turn
-			row, column = @interface.get_move
+			if @current_player.respond_to? :get_move
+				row, column = @current_player.get_move
+			else
+				row, column = @interface.get_move
+			end
 			
 			if valid_square? row, column
 				@interface.invalid_move row, column, true if @model.marked? row, column
@@ -63,7 +71,7 @@ class Engine
 			end
 		end until (valid_square? row, column) and !@model.marked? row, column
 		
-		@model.mark symbol, row, column
+		@model.mark @current_player.symbol, row, column
 		@interface.update :post_turn
 	end
 	

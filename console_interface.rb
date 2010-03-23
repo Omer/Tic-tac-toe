@@ -86,6 +86,10 @@ class ConsoleInterface
 	  Player.find_all.each {|player| puts "#{player.to_s} won #{player.victories}"}
 	  puts "------------------------\n\n"
   	end
+  	
+  	def handle_exception
+  		puts $!.message + "\n\n"
+  	end
 	
 	def exit
 		system 'clear'

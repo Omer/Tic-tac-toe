@@ -3,19 +3,19 @@ class Player
   
   @@players         = []
   @@players_cycle   = nil
-  @@defualt_symbols = nil
+  @@default_symbols = nil
  
   def initialize name
     raise ArgumentError, 'A player with that name already exists' unless self.class.find_by_name(name).nil?
     
-    @@defualt_symbols ||= [:X, :O].cycle
+    @@default_symbols ||= [:X, :O].cycle
     @@players.push self
     @@players_cycle = @@players.cycle
     
     raise 'A game can have only two players' if @@players.count > 2
 
     @name      = name
-    @symbol    = @@defualt_symbols.next
+    @symbol    = @@default_symbols.next
     @victories = 0
   end
   

@@ -1,7 +1,7 @@
 module Helper
-	def is_numeric? n
+	def is_numeric? num
 		begin
-			Float n
+			Float num
 			true
 		rescue
 			false

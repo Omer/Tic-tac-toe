@@ -15,7 +15,7 @@ class Model
   end
   
   # check whether a square have been marked.
-  def marked? row, column 
+  def marked? row, column
     @grid[row][column].nil? ? false : true
   end
   

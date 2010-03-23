@@ -9,14 +9,15 @@ class Engine
 	attr_reader :games, :turns, :current_player
 	
 	def initialize
+	  @model = Model.instance
 		@interface = nil
 		@current_player = nil
 		@games = []
 		@turns = 0
 	end
 	
-	def interface= i
-		@interface = i
+	def interface= interface
+		@interface = interface
 		@interface.update :setup
 	end
 	
@@ -29,16 +30,18 @@ class Engine
 		raise 'No interface set for engine' if @interface.nil?
 		
 		@interface.update :new_game
-		@turns  = 0
+		@turns = 0
 		
 		begin
 			@current_player = Player.find_next
-			turn @current_player
+			current_symbol = @current_player.symbol
+			
+			turn current_symbol
 			@turns += 1
-		end until (Model.instance.victory? @current_player.symbol) or Model.instance.grid_full?
+		end until (@model.victory? current_symbol) or @model.grid_full?
 		
-		if Model.instance.victory? @current_player.symbol
-			@games.push [Player.find_by_symbol(@current_player.symbol).name, @turns]
+		if @model.victory? current_symbol
+			@games.push [Player.find_by_symbol(current_symbol).name, @turns]
       @current_player.victory!
 			@interface.update :victory
 		else
@@ -48,24 +51,24 @@ class Engine
 	end
 	
 	protected
-	def turn player
+	def turn symbol
 		begin
 			@interface.update :pre_turn
 			row, column = @interface.get_move
 			
-			if valid_turn? row, column
-				@interface.invalid_move row, column, true if Model.instance.marked? row, column
+			if valid_square? row, column
+				@interface.invalid_move row, column, true if @model.marked? row, column
 			else
 				@interface.invalid_move row, column, false
 			end
-		end until (valid_turn? row, column) and !Model.instance.marked? row, column
+		end until (valid_square? row, column) and !@model.marked? row, column
 		
-		Model.instance.mark @current_player.symbol, row, column
+		@model.mark symbol, row, column
 		@interface.update :post_turn
 	end
-
-	def valid_turn? row, column
-		is_numeric? row and is_numeric? column and
+	
+	def valid_square? row, column
+	  is_numeric? row and is_numeric? column and
 		row    <= 2     and row    >= 0        and
 		column <= 2     and column >= 0
 	end

@@ -14,9 +14,7 @@ describe Engine do
   end
   
   it "should check whether it is a valid turn" do
-    @engine.send(:valid_turn?, 0, 0).should be_true
-    @engine.send(:valid_turn?, 3, 0).should be_false
-    @model.mark @player.symbol, 0, 0
-    @engine.send(:valid_turn?, 0, 0).should be_false
+    @engine.send(:valid_square?, 1, 1).should be_true
+    @engine.send(:valid_square?, 3, 0).should be_false
   end
 end

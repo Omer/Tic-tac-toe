@@ -52,13 +52,13 @@ class ConsoleInterface
 	end
 	
 	def get_move
-		(get_input[0..2].split ',').map {|s| s.to_i - 1 }
+		(get_input[0..2].split ',').map {|input| input.to_i - 1 }
 	end
 	
-	def get_player i
-		puts "Enter player #{i} name:"
+	def get_player number
+		puts "Enter player #{number} name:"
 		begin
-		  (input = gets) == "\n" ? name = "Player #{i}" : name = input
+		  (input = gets) == "\n" ? name = "Player #{number}" : name = input
 			puts "Please reenter the name:" if name.nil?
 		end until !name.nil?
 		puts "\n"
@@ -77,7 +77,7 @@ class ConsoleInterface
 	end
 	
 	def invalid_move row, column, marked
-		puts (marked ? "That square is already taken\n" : "Invalid move, enter move as 'row,column'.\n")
+		puts (marked ? "Square #{row},#{column} is already taken\n" : "Invalid move, enter move as 'row,column'.\n")
 	end
 	
 	def stats
@@ -89,10 +89,10 @@ class ConsoleInterface
 	
 	def exit
 		system 'clear'
-		Process.exit
+		abort('Thank you for playing Tic-tac-toe!')
 	end
 	
 	def print_grid
-		puts "\n" + (Model.instance.grid.map {|row| "  " + (row.map {|i| i.nil? ? " " : i.to_s}.join " | ")}.join "\n ---+---+---\n") + "\n\n"
+		puts "\n" + (Model.instance.grid.map {|row| "  " + (row.map {|symbol| symbol.nil? ? " " : symbol.to_s}.join " | ")}.join "\n ---+---+---\n") + "\n\n"
 	end
 end

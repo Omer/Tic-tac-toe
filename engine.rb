@@ -1,4 +1,4 @@
-require 'model'
+require 'game_board'
 require 'player'
 require 'helper'
 require 'singleton'
@@ -9,7 +9,7 @@ class Engine
 	attr_reader :games, :turns, :current_player
 	
 	def initialize
-	  @model = Model.instance
+	  	@board = GameBoard.instance
 		@interface = nil
 		@current_player = nil
 		@games = []
@@ -42,9 +42,9 @@ class Engine
 			
 			turn
 			@turns += 1
-		end until (@model.victory? current_symbol) or @model.grid_full?
+		end until (@board.victory? current_symbol) or @board.grid_full?
 		
-		if @model.victory? current_symbol
+		if @board.victory? current_symbol
 			@games.push [Player.find_by_symbol(current_symbol).name, @turns]
       @current_player.victory!
 			@interface.update :victory
@@ -65,13 +65,13 @@ class Engine
 			end
 			
 			if valid_square? row, column
-				@interface.invalid_move row, column, true if @model.marked? row, column
+				@interface.invalid_move row, column, true if @board.marked? row, column
 			else
 				@interface.invalid_move row, column, false
 			end
-		end until (valid_square? row, column) and !@model.marked? row, column
+		end until (valid_square? row, column) and !@board.marked? row, column
 		
-		@model.mark @current_player.symbol, row, column
+		@board.mark @current_player.symbol, row, column
 		@interface.update :post_turn
 	end
 	

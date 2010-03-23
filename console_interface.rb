@@ -1,10 +1,11 @@
 require 'engine'
-require 'model'
+require 'game_board'
 require 'player'
 
 class ConsoleInterface
 	def initialize
-		@engine = Engine.instance
+		@board            = GameBoard.instance
+		@engine           = Engine.instance
 		@engine.interface = self
 	end
 	
@@ -97,6 +98,8 @@ class ConsoleInterface
 	end
 	
 	def print_grid
-		puts "\n" + (Model.instance.grid.map {|row| "  " + (row.map {|symbol| symbol.nil? ? " " : symbol.to_s}.join " | ")}.join "\n ---+---+---\n") + "\n\n"
+		puts ''
+		puts (0..2).map {|row| "  " + ((0..2).map {|column| (@board.marked? row, column) ? (@board.get_symbol row, column) : " "}.join " | ")}.join "\n ---+---+---\n"
+		puts "\n"
 	end
 end

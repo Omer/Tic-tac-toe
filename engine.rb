@@ -58,11 +58,7 @@ class Engine
 	def turn
 		begin
 			@interface.update :pre_turn
-			if @current_player.respond_to? :get_move
-				row, column = @current_player.get_move
-			else
-				row, column = @interface.get_move
-			end
+			row, column = @current_player.respond_to?(:get_move) ? @current_player.get_move : @interface.get_move
 			
 			if valid_square? row, column
 				@interface.invalid_move row, column, true if @board.marked? row, column
